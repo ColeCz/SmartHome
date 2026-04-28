@@ -1,0 +1,4 @@
+.venv/
+reminders.txt
+__pycache__
+.env
