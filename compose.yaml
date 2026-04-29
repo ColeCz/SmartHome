@@ -1,0 +1,40 @@
+name: Gantt-Property-App
+
+services:
+  db:
+    hostname: db
+    image: postgres:16.13
+    env_file:
+      - ./db/.env
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d
+
+  pgadmin:
+    hostname: pgadmin
+    image: dpage/pgadmin4:8.12
+    env_file:
+      - ./db/.env
+    user: root
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+      - ./db/pgadmin/servers.json:/pgadmin4/servers.json:ro
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+
+  backend:
+    hostname: backend
+    build: ./backend/
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    restart: always
+    depends_on:
+      - db
+
+volumes:
+  postgres-data:
+  pgadmin-data:

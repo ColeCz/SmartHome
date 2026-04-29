@@ -2,3 +2,4 @@
 reminders.txt
 __pycache__
 .env
+db/pgadmin/servers.json
