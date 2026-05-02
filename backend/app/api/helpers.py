@@ -1,5 +1,10 @@
 from sqlalchemy.orm import Session
 from app.db.session import SessionLocal
+from fastapi import FastAPI, Request, Cookie
+import redis
+
+
+redis = redis.Redis(host="redis", port=6379, decode_responses=True)
 
 def get_db():
     db = SessionLocal()
@@ -7,3 +12,9 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
+def is_signed_in(request: Request) -> bool:
+    session_id = request.cookies.get("session_id")
+    first_name = redis.hget(f"session:{session_id}", "first_name")
+    return first_name != None
