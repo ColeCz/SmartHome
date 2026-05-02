@@ -1,18 +1,11 @@
 from fastapi import FastAPI
+from app.api.users import router as users_router
+
 
 app = FastAPI()
+app.include_router(users_router, prefix="/users", tags=["users"])
 
 
 @app.get("/")
-def read_root():
-    return {"Hello": "World"}
-
-@app.get("/root_again")
-def read_root_again():
-    return {"Hello": "World"}
-
-
-# item_id is a path parameter, q is an optional query parameter
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: str | None = None):
-    return {"item_id": item_id, "q": q}
+async def root():
+    return {"message": "Hello World"}
