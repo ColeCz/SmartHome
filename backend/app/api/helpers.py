@@ -16,5 +16,5 @@ def get_db():
 
 def is_signed_in(request: Request) -> bool:
     session_id = request.cookies.get("session_id")
-    first_name = redis.hget(f"session:{session_id}", "first_name")
-    return first_name != None
+    session = redis.hgetall(session_id)
+    return session != None
